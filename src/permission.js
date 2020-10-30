@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect, Route, Link } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 // import NProgress from 'nprogress'; // progress bar
 // import 'nprogress/nprogress.css'; // progress bar style
@@ -8,16 +8,13 @@ import { getUserInfo } from '@/utils/auth';
 import { getToken } from '@/utils/auth';
 import { getPermissionTabs } from '@/api/user';
 
-import Login from '@/pages/login';
-import Check from '@/pages/responsibility/check';
-import Customized from '@/pages/responsibility/customized';
-
 class Permission extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			whiteList: ['/login'],
 			permission: [],
+			list: [],
 		};
 	}
 
@@ -65,49 +62,67 @@ class Permission extends Component {
 		});
 		return res;
 	};
-
-  /**
-   * 生成路由 
-   * @param {*} permissionTabs 
-   */
-	generateRoutes = (permissionTabs) => {
-		console.log('++', this.props);
+	/**
+	 * eg: 配置路由
+	 * @param {*} permissionTabs
+	 */
+	configureRoutes = (permissionTabs) => {
 		const { constantRoutes, asyncRoutes } = this.props.children;
 
 		let accessRoutes = this.filterAsyncRoutes(asyncRoutes, permissionTabs);
-		let totalRoutes = constantRoutes.connect(accessRoutes);
+		let totalRoutes = constantRoutes.concat(accessRoutes);
+
+		return <>{this.generateRoutes(totalRoutes)}</>;
+	};
+
+	/**
+	 * eg: 生成路由
+	 * @param {*} routes
+	 */
+	generateRoutes = (routes) => {
+		const copyRoutes = routes.map((item) => item);
+		const res = [];
+		copyRoutes.forEach((item) => {
+			const tmp = { ...item };
+			if (tmp.children) {
+				for (let index = 0; index < tmp.children.length; index++) {
+					const element = tmp.children[index];
+					res.push(element);
+				}
+			}
+			res.push(tmp);
+		});
 
 		return (
 			<>
-				<Route path="/customized" component={Customized} />
-				<Route path="/check" component={Check} />
-				<Route path="/login" component={Login} />
-				{/* <Route exact path={path} component={component} /> */}
+				{res.map((item, index) => {
+					return <Route exact key={index} path={item.path} component={item.component ? item.component : null} name={item.name} />;
+				})}
 			</>
 		);
 	};
 
 	render() {
 		const { whiteList } = this.state;
-		const { path, component, children, location, user, permission } = this.props;
+		const { path, location, user, permission } = this.props;
 		const { pathname } = location;
 		if (getToken()) {
 			const curPermissionTabs = user['permission'];
 
 			if (curPermissionTabs && curPermissionTabs.length > 0) {
-				console.log('现在有权限表', curPermissionTabs);
-				return this.generateRoutes(path, component);
+				// console.log('现在有权限表', curPermissionTabs);
+				return this.configureRoutes(curPermissionTabs);
 			} else {
-				console.log('现在没有权限表', curPermissionTabs);
+				// console.log('现在没有权限表', curPermissionTabs);
 				this.getPermissionTabsOption().then((result) => {
 					permission(result);
-					return this.generateRoutes(result);
+					return this.configureRoutes(result);
 				});
 			}
 
-			return this.generateRoutes(path, component);
+			return curPermissionTabs && curPermissionTabs.length > 0 ? this.configureRoutes(curPermissionTabs) : null;
 		} else {
-			console.log('no - token');
+			console.log('no - token', pathname);
 			return (
 				<Redirect
 					to={{

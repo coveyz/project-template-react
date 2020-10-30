@@ -1,5 +1,5 @@
-import Check from '@/pages/responsibility/check';
-import Customized from '@/pages/responsibility/customized';
+import Check from '@/pages/responsibility/check/index.jsx';
+import Customized from '@/pages/responsibility/customized/index.jsx';
 
 const responsibilityRouter = {
 	path: '/responsibility',
@@ -18,17 +18,17 @@ const responsibilityRouter = {
 				icon: '',
 				limit: 'zrqd_zrqdzd',
 			},
-			component: Check,
+			component: Customized,
 		},
 		{
-			path: 'check',
+			path: '/check',
 			name: 'check',
 			meta: {
 				title: '责任清单查看',
 				icon: '',
 				limit: 'zrqd_zrqdck',
 			},
-			component: Customized,
+			component: Check,
 		},
 	],
 };

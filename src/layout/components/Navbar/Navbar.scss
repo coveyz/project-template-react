@@ -1,0 +1,39 @@
+.navbar-frame {
+	box-sizing: border-box;
+	background: #ea272f;
+	height: 40px;
+	.navbar-logo {
+		float: left;
+		width: 380px;
+		padding-left: 20px;
+		img {
+			height: 24px;
+			display: inline-block;
+			margin: 8px;
+			vertical-align: top;
+		}
+		span {
+			font-size: 26px;
+			color: white;
+			line-height: 40px;
+			font-weight: 700;
+		}
+	}
+	.navbar-option {
+		float: right;
+		padding-right: 20px;
+		height: 100%;
+		.navbar-option-item {
+			display: inline-block;
+			height: 100%;
+			font-size: 18px;
+			color: #5a5e66;
+			line-height: 40px;
+			vertical-align: text-bottom;
+			margin-right: 10px;
+		}
+		.navbar-option-item:hover {
+			cursor: pointer;
+		}
+	}
+}

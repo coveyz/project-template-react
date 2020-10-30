@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getToken } from '@/utils/auth';
 import { errorNotification } from '@/utils/tools';
 
 const http = axios.create({
@@ -7,6 +8,9 @@ const http = axios.create({
 
 http.interceptors.request.use(
 	(config) => {
+		if (getToken('Party-Building-Token')) {
+			config.headers['Authorization'] = getToken('Party-Building-Token');
+		}
 		return config;
 	},
 	(error) => {

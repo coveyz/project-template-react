@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import './index.scss';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -73,6 +74,7 @@ const mapDispatchToProps = {
 			type: 'login',
 			value: userInfo,
 			callback: (res) => {
+				window.location.replace('/');
 				console.log('login-callback', res);
 			},
 		};

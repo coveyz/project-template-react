@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from '@/store';
 import '@/styles/index.scss';
 import 'antd/dist/antd.css';
+import '@/icons';
 
 ReactDOM.render(
 	<Provider store={store}>

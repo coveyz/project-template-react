@@ -5,6 +5,11 @@ class Check extends Component {
 		super(props);
 		this.state = {};
 	}
+
+	componentDidMount() {
+		console.log('check');
+	}
+
 	render() {
 		return <div>check</div>;
 	}

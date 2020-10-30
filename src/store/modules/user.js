@@ -46,11 +46,11 @@ const handleLoginOption = (state, userInfo) => {
 const UserModule = (state = { ...userState }, { type, value, callback }) => {
 	switch (type) {
 		case 'login':
-			const result = handleLoginOption(state, value).then(() => {
-				callback(result);
-				return result;
-			});
-			break;
+			handleLoginOption(state, value).then((res) => {
+				callback(res);
+				return res;
+      });
+      return state
 		case 'permission':
 			return { ...state, permission: value ? value : [] };
 		default:
